@@ -2,6 +2,7 @@ import discord
 import asyncio
 from threading import Thread
 import string
+import zlib
 
 
 class Plugin:
@@ -33,9 +34,12 @@ class Plugin:
         await Plugin.channel.send(f'{event_dict["username"]}: {event_dict["message"]}')
 
     async def on_join(event_dict):
+        pip = (event_dict['ip'])
+        pib = bytes(pip, 'utf-8')
+        pid = zlib.crc32(pib)
         await Plugin.channel.send(f'''
 ```diff
-+ {event_dict['username']}
++ {event_dict['username']}\n{pid}
 ```''')
 
     async def on_leave(event_dict):
